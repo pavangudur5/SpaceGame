@@ -14,6 +14,13 @@ class GameScene: SKScene {
     var starfield:SKEmitterNode!
     var player:SKSpriteNode!
     
+    var scoreLabel : SKLabelNode!
+    var score:Int = 0 {
+        didSet {
+            scoreLabel.text = "Score \(score)"
+        }
+    }
+    
     override func didMove(to view: SKView) {
        
         starfield = SKEmitterNode(fileNamed: "Starfield.sks");
@@ -29,6 +36,10 @@ class GameScene: SKScene {
         
         self.addChild(player)
         
+        self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+        self.physicsWorld.contactDelegate = self as? SKPhysicsContactDelegate
+        
+        scoreLabel = SKLabelNode(text: "Score: 0")
     }
     
     override func update(_ currentTime: TimeInterval) {
