@@ -21,6 +21,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    var gameTimer : Timer!
+    
+    var possibleAliens = ["alien", "alien2", "alien3"]
+    
     override func didMove(to view: SKView) {
         
         starfield = SKEmitterNode(fileNamed: "Starfield")
@@ -47,6 +51,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         score = 0
         
         self.addChild(scoreLabel)
+        
+        gameTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: #selector(addAliean), userInfo: nil, repeats: true)
+        
+    }
+    
+    func addAliean()
+    {
+        possibleAliens = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: possibleAliens) as! [String]
+        
+        let alien = SKSpriteNode(imageNamed : possibleAliens[0])
+        let randomAlienPosition = GKRandomDistribution(lowestValue: 0, highestValue: 414)
+        let position = CGFloat(randomAlienPosition.nextInt())
+        
+        alien.position = CGPoint(x: position, y: self.frame.size.height + alien.size.height)
+        
+        alien.physicsBody = SKPhysicsBody(rectangleOf: alien.size)
+        alien.physicsBody?.isDynamic = true
     }
     
     override func update(_ currentTime: TimeInterval) {
